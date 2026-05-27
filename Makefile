@@ -4,10 +4,10 @@ export
 export PROJECT_ROOT=$(shell pwd)
 
 env-up:
-	docker compose up -d postgres
+	@docker compose up -d postgres
 
 env-down:
-	docker compose down postgres
+	@docker compose down postgres
 
 env-cleanup:
 	@read -p "Clear all volume files of env? Warning!. [y/N]: " ans; \
@@ -29,3 +29,19 @@ migrate-create:
 		-ext sql \
 		-dir /migrations \
 		-seq "$(seq)"
+
+migrate-up:
+	@make migrate-action action=up
+
+migrate-down:
+	@make migrate-action action=down
+	
+migrate-action:
+	@if [ -z "$(action)" ]; then \
+		echo "Parametr action is empty"; \
+		exit 1; \
+	fi;
+	docker compose run -rm postgres-migrate \
+		-path /migrations \
+		-database postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@postgres:5432/$(POSTGRES_DB)?sslmode=disable \
+		"$(action)"
