@@ -18,3 +18,14 @@ env-cleanup:
 	else \
 		echo "Cleaning is canceled"; \
 	fi
+
+migrate-create:
+	@if [ -z "$(seq)" ]; then \
+		echo "Parametr seq is empty"; \
+		exit 1; \
+	fi;
+	docker compose run --rm postgres-migrate \
+		create \
+		-ext sql \
+		-dir /migrations \
+		-seq "$(seq)"
