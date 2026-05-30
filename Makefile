@@ -41,7 +41,13 @@ migrate-action:
 		echo "Parametr action is empty"; \
 		exit 1; \
 	fi;
-	docker compose run -rm postgres-migrate \
+	docker compose run --rm postgres-migrate \
 		-path /migrations \
 		-database postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@postgres:5432/$(POSTGRES_DB)?sslmode=disable \
 		"$(action)"
+
+env-port-forwarder:
+	@docker compose up -d port-forwarder
+
+env-port-close:
+	@docker compose down port-forwarder
