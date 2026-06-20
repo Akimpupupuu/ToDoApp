@@ -26,7 +26,6 @@ func main() {
 		fmt.Println("failed init application logger:", err)
 		os.Exit(1)
 	}
-
 	defer logger.Close()
 
 	logger.Debug("initializing postgres connection pool")
@@ -37,13 +36,11 @@ func main() {
 	defer pool.Close()
 
 	logger.Debug("initializing feature", zap.String("feature", "users"))
-
 	usersRepository := users_postgres_repository.NewUsersRepository(pool)
 	usersService := users_service.NewUsersService(usersRepository)
 	usersTransportHTTP := users_transport_http.NewUsersHTTPHandler(usersService)
 
 	logger.Debug("initializing HTTP server")
-
 	httpServer := core_http_server.NewHTTPServer(
 		core_http_server.NewConfigMust(),
 		logger,
