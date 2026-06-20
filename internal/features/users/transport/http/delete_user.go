@@ -8,8 +8,6 @@ import (
 	core_http_utils "github.com/Akimpupupuu/ToDoApp/internal/core/transport/http/utils"
 )
 
-type DeleteResponse UserDTOResponse
-
 func (h *UsersHTTPHandler) DeleteUser(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	log := core_logger.FromContext(ctx)
