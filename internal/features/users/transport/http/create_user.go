@@ -19,7 +19,7 @@ type CreateUserResponse UserDTOResponse
 func (h *UsersHTTPHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	log := core_logger.FromContext(ctx)
-	responseHandler := core_http_response.NewHTTPResponse(log, w)
+	responseHandler := core_http_response.NewHTTPResponseHandler(log, w)
 
 	log.Debug("invoke create user handler")
 

@@ -16,7 +16,7 @@ type HTTPResponseHandler struct {
 	rw  http.ResponseWriter
 }
 
-func NewHTTPResponse(log *core_logger.Logger, rw http.ResponseWriter) *HTTPResponseHandler {
+func NewHTTPResponseHandler(log *core_logger.Logger, rw http.ResponseWriter) *HTTPResponseHandler {
 	return &HTTPResponseHandler{
 		log: log,
 		rw:  rw,
