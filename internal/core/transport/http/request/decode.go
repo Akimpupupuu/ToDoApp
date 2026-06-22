@@ -9,6 +9,10 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
+type validatable interface {
+	Validate() error
+}
+
 var requestValidator = validator.New()
 
 func DecodeAndValidateRequest(r *http.Request, dto any) error {
@@ -16,7 +20,18 @@ func DecodeAndValidateRequest(r *http.Request, dto any) error {
 		return fmt.Errorf("decode json %v: %w", err, core_errors.ErrInvalidArgument)
 	}
 
-	if err := requestValidator.Struct(dto); err != nil {
+	var (
+		err error
+	)
+
+	v, ok := dto.(validatable)
+	if ok {
+		err = v.Validate()
+	} else {
+		err = requestValidator.Struct(dto)
+	}
+
+	if err != nil {
 		return fmt.Errorf("request validation %v: %w", err, core_errors.ErrInvalidArgument)
 	}
 
