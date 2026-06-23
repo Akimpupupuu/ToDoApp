@@ -13,7 +13,7 @@ env-cleanup:
 	@read -p "Clear all volume files of env? Warning!. [y/N]: " ans; \
 	if [ "$$ans" = "y" ]; then \
 		docker compose down postgres port-forwarder && \
-		sudo rm -rf out/pgdata && \
+		sudo rm -rf ${PROJECT_ROOT}/out/pgdata && \
 		echo "Env files are cleared"; \
 	else \
 		echo "Cleaning is canceled"; \
@@ -56,4 +56,4 @@ todoapp-run:
 	@export LOGGER_FOLDER=${PROJECT_ROOT}/out/logs && \
 	export POSTGRES_HOST=localhost && \
 	go mod tidy && \
-	go run cmd/todoapp/main.go
+	go run ${PROJECT_ROOT}/cmd/todoapp/main.go

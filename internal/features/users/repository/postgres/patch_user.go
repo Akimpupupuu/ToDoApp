@@ -7,7 +7,7 @@ import (
 
 	"github.com/Akimpupupuu/ToDoApp/internal/core/domain"
 	core_errors "github.com/Akimpupupuu/ToDoApp/internal/core/errors"
-	"github.com/jackc/pgx/v5"
+	core_postgres_pool "github.com/Akimpupupuu/ToDoApp/internal/core/repository/posgres/pool"
 )
 
 func (r *UsersRepository) PatchUser(ctx context.Context, id int, user domain.User) (domain.User, error) {
@@ -21,7 +21,7 @@ func (r *UsersRepository) PatchUser(ctx context.Context, id int, user domain.Use
 	 	phone_number=$2,
 		version=version+1
 	WHERE id=$3 AND version=$4
-	RETURNING id, version, full_name, phone_number
+	RETURNING id, version, full_name, phone_number;
 	`
 
 	row := r.pool.QueryRow(ctx, query, user.FullName, user.PhoneNumber, id, user.Version)
@@ -33,7 +33,7 @@ func (r *UsersRepository) PatchUser(ctx context.Context, id int, user domain.Use
 		&userModel.PhoneNumber,
 	)
 	if err != nil {
-		if errors.Is(err, pgx.ErrNoRows) {
+		if errors.Is(err, core_postgres_pool.ErrNoRows) {
 			return domain.User{}, fmt.Errorf("scan with id='%d' concurrently accessed: %w", id, core_errors.ErrConflict)
 		}
 
