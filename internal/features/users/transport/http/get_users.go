@@ -28,7 +28,7 @@ func (h *UsersHTTPHandler) GetUsers(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	response := GetUsersResponse(UsersDTOFromDomain(userDomains))
+	response := GetUsersResponse(usersDTOFromDomain(userDomains))
 
 	responseHandler.JsonResponse(response, http.StatusOK)
 }
